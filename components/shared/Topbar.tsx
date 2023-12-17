@@ -1,4 +1,5 @@
 import { OrganizationSwitcher, SignOutButton, SignedIn } from '@clerk/nextjs'
+import { dark } from '@clerk/themes'
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
@@ -24,6 +25,7 @@ export default function Topbar() {
                 </div>
                 {/* Adds a drop down that allows user to create their own organization or workspace */}
                 <OrganizationSwitcher appearance={{
+                    baseTheme:dark,
                     elements:{
                         organizationSwitcherTrigger:"py-2 px-4"
                     }
