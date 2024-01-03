@@ -24,14 +24,14 @@ import { useUploadThing } from '@/lib/uploadthings';
 
 interface Props {
     userData: {
-        id: String,
-        objectId: String,
-        userName: String,
-        name: String,
-        bio: String,
-        image: String
+        id: string,
+        objectId: string,
+        userName: string,
+        name: string,
+        bio: string,
+        image: string
     },
-    btnTitle: String;
+    btnTitle: string;
 }
 
 // zod allows to validate schema with validation type
@@ -159,7 +159,7 @@ export default function AccountProfile({ userData, btnTitle }: Props) {
                                 Bio
                             </FormLabel>
                             <FormControl >
-                                <Textarea
+                                <Textarea 
                                     rows={10}
                                     className='account-form_input no-focus'
                                     placeholder="Enter a bio"
