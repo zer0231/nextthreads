@@ -23,7 +23,7 @@ import { useUploadThing } from '@/lib/uploadthings';
 
 
 interface Props {
-    userData: {
+    user: {
         id: string,
         objectId: string,
         userName: string,
@@ -35,17 +35,17 @@ interface Props {
 }
 
 // zod allows to validate schema with validation type
-export default function AccountProfile({ userData, btnTitle }: Props) {
+export default function AccountProfile({ user, btnTitle }: Props) {
     const [files, setFiles] = useState<File[]>([]);
     const { startUpload } = useUploadThing("media")
 
     const form = useForm({
         resolver: zodResolver(UserValidation),
         defaultValues: {
-            profile_photo: userData?.image || "",
-            name: userData?.name || "",
-            user_name: userData?.userName || "",
-            bio: userData?.bio || ""
+            profile_photo: user?.image || "",
+            name: user?.name || "",
+            user_name: user?.userName || "",
+            bio: user?.bio || ""
         }
     });
 

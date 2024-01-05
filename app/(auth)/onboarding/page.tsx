@@ -12,12 +12,12 @@ async function Page() {
       image: ""
    };
    const userData = {
-      id: user?.id,
+      id: user?.id ?? "",
       objectId: userInfo?._id,
       userName: userInfo?.userName,
       name: userInfo?.name || user?.firstName || "",
       bio: userInfo?.bio || "",
-      image: userInfo?.image || user?.imageUrl
+      image: user?.imageUrl ?? ""
 
    };
    return (
@@ -29,7 +29,7 @@ async function Page() {
          </p>
          <section className="mt-9 bg-dark-2 p-10">
 
-            <AccountProfile userData={userData} btnTitle="Continue" />     {/* Passing data to props */}
+            <AccountProfile user={userData} btnTitle="Continue" />     {/* Passing data to props */}
          </section>
       </main>
    )
