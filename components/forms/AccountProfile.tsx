@@ -20,6 +20,8 @@ import { ChangeEvent, useState } from 'react';
 import { Textarea } from '../ui/textarea';
 import { isBase64Image } from '@/lib/utils';
 import { useUploadThing } from '@/lib/uploadthings';
+import { updateUser } from '@/lib/actions/user.actions';
+import { usePathname, useRouter } from 'next/navigation';
 
 
 interface Props {
@@ -38,6 +40,8 @@ interface Props {
 export default function AccountProfile({ user, btnTitle }: Props) {
     const [files, setFiles] = useState<File[]>([]);
     const { startUpload } = useUploadThing("media")
+    const router = useRouter();
+    const pathname = usePathname();
 
     const form = useForm({
         resolver: zodResolver(UserValidation),
@@ -78,7 +82,22 @@ export default function AccountProfile({ user, btnTitle }: Props) {
                 values.profile_photo = imageRes[0].url;
             }
         }
-//Upload to mongodb
+
+        await updateUser({
+            userId: user.id, //Comming from clerk
+            username: values.user_name,
+            name: values.name,
+            bio: values.bio,
+            image: values.profile_photo,
+            path: pathname
+        });
+
+        if (pathname === '/profile/edit') {
+            router.back();
+        } else {
+            router.push('/');
+        }
+
     }
 
     return (
@@ -159,7 +178,7 @@ export default function AccountProfile({ user, btnTitle }: Props) {
                                 Bio
                             </FormLabel>
                             <FormControl >
-                                <Textarea 
+                                <Textarea
                                     rows={10}
                                     className='account-form_input no-focus'
                                     placeholder="Enter a bio"
