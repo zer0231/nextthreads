@@ -20,32 +20,36 @@ import { ChangeEvent, useState } from 'react';
 import { Textarea } from '../ui/textarea';
 import { isBase64Image } from '@/lib/utils';
 import { useUploadThing } from '@/lib/uploadthings';
+import { updateUser } from '@/lib/actions/user.actions';
+import { usePathname, useRouter } from 'next/navigation';
 
 
 interface Props {
-    userData: {
-        id: String,
-        objectId: String,
-        userName: String,
-        name: String,
-        bio: String,
-        image: String
+    user: {
+        id: string,
+        objectId: string,
+        userName: string,
+        name: string,
+        bio: string,
+        image: string
     },
-    btnTitle: String;
+    btnTitle: string;
 }
 
 // zod allows to validate schema with validation type
-export default function AccountProfile({ userData, btnTitle }: Props) {
+export default function AccountProfile({ user, btnTitle }: Props) {
     const [files, setFiles] = useState<File[]>([]);
     const { startUpload } = useUploadThing("media")
+    const router = useRouter();
+    const pathname = usePathname();
 
     const form = useForm({
         resolver: zodResolver(UserValidation),
         defaultValues: {
-            profile_photo: userData?.image || "",
-            name: userData?.name || "",
-            user_name: userData?.userName || "",
-            bio: userData?.bio || ""
+            profile_photo: user?.image || "",
+            name: user?.name || "",
+            user_name: user?.userName || "",
+            bio: user?.bio || ""
         }
     });
 
@@ -78,7 +82,22 @@ export default function AccountProfile({ userData, btnTitle }: Props) {
                 values.profile_photo = imageRes[0].url;
             }
         }
-//Upload to mongodb
+
+        await updateUser({
+            userId: user.id, //Comming from clerk
+            username: values.user_name,
+            name: values.name,
+            bio: values.bio,
+            image: values.profile_photo,
+            path: pathname
+        });
+
+        if (pathname === '/profile/edit') {
+            router.back();
+        } else {
+            router.push('/');
+        }
+
     }
 
     return (
