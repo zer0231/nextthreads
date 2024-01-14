@@ -89,7 +89,7 @@ export default function AccountProfile({ user, btnTitle }: Props) {
             name: values.name,
             bio: values.bio,
             image: values.profile_photo,
-            path: pathname
+            path: pathname,
         });
 
         if (pathname === '/profile/edit') {
@@ -123,6 +123,7 @@ export default function AccountProfile({ user, btnTitle }: Props) {
                                     accept='image/*'
                                     onChange={(e) => handleImage(e, field.onChange)} />
                             </FormControl>
+                            <FormMessage />
                         </FormItem>
                     )}
                 />
@@ -143,7 +144,7 @@ export default function AccountProfile({ user, btnTitle }: Props) {
                                     className='account-form_input no-focus'
                                     placeholder="Enter your full name"
                                     {...field} />
-                            </FormControl>
+                            </FormControl>              <FormMessage />
                         </FormItem>
                     )}
                 />
@@ -163,7 +164,7 @@ export default function AccountProfile({ user, btnTitle }: Props) {
                                     className='account-form_input no-focus'
                                     placeholder="Enter a username"
                                     {...field} />
-                            </FormControl>
+                            </FormControl>              <FormMessage />
                         </FormItem>
                     )}
                 />
@@ -183,7 +184,7 @@ export default function AccountProfile({ user, btnTitle }: Props) {
                                     className='account-form_input no-focus'
                                     placeholder="Enter a bio"
                                     {...field} />
-                            </FormControl>
+                            </FormControl>              <FormMessage />
                         </FormItem>
                     )}
                 />
