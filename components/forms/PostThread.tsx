@@ -63,11 +63,12 @@ export default function PostThread({ userId }: { userId: string }) {
                             <FormControl className='no-focus border border-dark-4 bg-dark-3 text-light-1' >
                                 <Textarea rows={15}
                                     className='account-form_input no-focus'
-                                    placeholder="Enter a username"
+                                    placeholder="Start threading :)"
                                     {...field} />
                             </FormControl>
                             <FormMessage />
                         </FormItem>)} />
+                        <Button className='bg-primary-500' type="submit">Submit</Button>
             </form>
         </Form>)
 }
