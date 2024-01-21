@@ -23,7 +23,31 @@ export async function createThread({ text, author, communityId, path }: Params) 
             $push: { threads: createdThread._id } //push the thread to the user that created it
         })
         revalidatePath(path);
-    } catch (error:any) {
+    } catch (error: any) {
         throw new Error(`Error creating thread:${error.message} `)
+    }
 }
+export async function fetchPosts(pageNumber = 1, pageSize = 20) {
+    connectToDB();
+    const skipAmount = (pageNumber - 1) * pageSize; //How many thread per page to show and skip
+    //Fetch the post without parents
+    // populate acts like fetching from another collection like using a foregin key
+    const postsQuery = await Thread.find({ parentId: { $in: [null, undefined] } })
+        .sort({ createdAt: 'desc' })
+        .skip(skipAmount)
+        .limit(pageSize)
+        .populate({ path: 'author', model: User })
+        .populate({ 
+            path: 'children', 
+            populate: { 
+                path: 'author', 
+                model: User, 
+                select: "_id name parentId image" 
+            } 
+        })
+    const totalPostsCount = await Thread.countDocuments({parentId:{$in:[null,undefined]}});
+    const posts = await postsQuery;//Should have .exec function
+    const isNext = totalPostsCount > skipAmount + posts.length;
+    return{posts,isNext};
+
 }
