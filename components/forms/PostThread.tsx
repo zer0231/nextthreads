@@ -19,6 +19,7 @@ import { Textarea } from '../ui/textarea';
 // import { updateUser } from '@/lib/actions/user.actions';
 import { usePathname, useRouter } from 'next/navigation';
 import { ThreadValidation } from '@/lib/validations/thread';
+import { createThread } from '@/lib/actions/thread.actions';
 
 
 interface Props {
@@ -47,7 +48,13 @@ export default function PostThread({ userId }: { userId: string }) {
             accountId: userId,
         }
     });
-    const onSubmit = () => { }
+    const onSubmit = async (values: z.infer<typeof ThreadValidation>) => {//Executes the function when post thread button is pressed
+        await createThread({
+            text: values.thread,
+            author: userId, communityId: null, path: pathname
+        });
+        router.push("/");  //redirect to home page
+    }
     return (
 
         <Form {...form}>
@@ -63,11 +70,12 @@ export default function PostThread({ userId }: { userId: string }) {
                             <FormControl className='no-focus border border-dark-4 bg-dark-3 text-light-1' >
                                 <Textarea rows={15}
                                     className='account-form_input no-focus'
-                                    placeholder="Enter a username"
+                                    placeholder="Start threading :)"
                                     {...field} />
                             </FormControl>
                             <FormMessage />
                         </FormItem>)} />
+                <Button className='bg-primary-500' type="submit">Post Thread</Button>
             </form>
         </Form>)
 }

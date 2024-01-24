@@ -9,7 +9,7 @@ export default async function Page() {
     const user = await currentUser(); //Checking for logged in user
     if(!user) return null;
     const userInfo = await fetchUser(user.id);
-    console.log(userInfo)
+    console.log("This is userInfo value:"+userInfo)
     if(!userInfo?.onBoard) redirect('/onboarding'); //if onboarded isnt completed then user is redirected
   return (
     <>
