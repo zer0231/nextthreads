@@ -23,11 +23,15 @@ interface Props {
 const ThreadCard = ({
     id, currentUserId, parentId, content, author, community, createdAt, comments
 }: Props) => {
-return(<article>
-    <h2 className="text-small-regular text-light-2">
-        {content}
-    </h2>
-</article>)
+    return (<article>
+        <h3 className="text-small-regular text-light-2">
+            {author.name ?? currentUserId}
+        </h3>
+        <h2 className="text-small-regular text-light-2">
+
+            {content}
+        </h2>
+    </article>)
 }
 
 export default ThreadCard;
