@@ -25,7 +25,7 @@ interface Props {
 }
 
 const ThreadCard = ({
-    username, id, currentUserId, parentId, content, author, community, createdAt, comments
+    username, id, currentUserId, parentId, content, author, community, createdAt, comments, isComment
 }: Props) => {
     return (<article className="flex w-full flex-col rounded-x1 bg-dark-2 p-7">
         <div className="flex item-start justify-between">
@@ -39,6 +39,7 @@ const ThreadCard = ({
                             className="cursor-pointer rounded-full"
                         />
                     </Link>
+                    {/* adds line */}
                     <div className="thread-card_bar" />
 
                 </div>
@@ -49,17 +50,29 @@ const ThreadCard = ({
                             {username}
                         </h4>
                     </Link>
-                </div>
+                    <p className="mt-2 text-small-regular text-light-2">{content}</p>
+                    <div className="mt-5 flex flex-col gap-3">
+                        <div className="flex gap-3 5">
+                            {/* TODO : Add these functionality */}
+                            <Image src="/assets/heart-gray.svg" alt="heart" width={24} height={24} className="cursor-pointer object-contain" />
+                            <Link href={`/thread/${id}`}>
+                                <Image src="/assets/reply.svg" alt="reply" width={24} height={24} className="cursor-pointer object-contain" />
+                            </Link>
+                            <Image src="/assets/repost.svg" alt="repost" width={24} height={24} className="cursor-pointer object-contain" />
+                            <Image src="/assets/share.svg" alt="share" width={24} height={24} className="cursor-pointer object-contain" />
 
+                        </div>
+                        {isComment && comments.length > 0 &&(
+                            <Link href={`/thread/${id}`}>
+                                <p className="mt-1 text-light-3 text-subtle-medium">{comments.length} replies</p>
+                            </Link>
+                        )}
+                    </div>
+                </div>
             </div>
         </div>
-        <h3 className="text-small-regular text-light-2">
-            {/* {author.name ?? currentUserId} */}
-        </h3>
-        <h2 className="text-small-regular text-light-2">
 
-            {content}
-        </h2>
+
     </article>)
 }
 
