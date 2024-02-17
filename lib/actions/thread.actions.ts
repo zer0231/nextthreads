@@ -27,6 +27,40 @@ export async function createThread({ text, author, communityId, path }: Params) 
         throw new Error(`Error creating thread:${error.message} `)
     }
 }
+
+export async function fetchThreadById(id: string) {
+    connectToDB();
+    try {
+        const thread = await Thread.findById(id)
+            .populate({
+                path: 'author',
+                model: User,
+                select: "_id id name image"
+            }).populate({
+                path: 'children',
+                populate: [
+                    {
+                        path: 'author',
+                        model: User,
+                        select: "_id id name parentId image"
+                    },
+                    {
+                        path: 'children',
+                        model: Thread,
+                        populate: {
+                            path: 'author',
+                            model: User,
+                            select: "_id id name parentId image"
+                        }
+                    }
+                ]
+            }).exec();
+            return thread;
+    } catch (error:any) {
+throw new Error(`Error fetching thread : ${error.message}`)
+    }
+}
+
 export async function fetchPosts(pageNumber = 1, pageSize = 20) {
     connectToDB();
     const skipAmount = (pageNumber - 1) * pageSize; //How many thread per page to show and skip
@@ -37,17 +71,17 @@ export async function fetchPosts(pageNumber = 1, pageSize = 20) {
         .skip(skipAmount)
         .limit(pageSize)
         .populate({ path: 'author', model: User })
-        .populate({ 
-            path: 'children', 
-            populate: { 
-                path: 'author', 
-                model: User, 
-                select: "_id name parentId image" 
-            } 
+        .populate({
+            path: 'children',
+            populate: {
+                path: 'author',
+                model: User,
+                select: "_id name parentId image"
+            }
         })
-    const totalPostsCount = await Thread.countDocuments({parentId:{$in:[null,undefined]}});
+    const totalPostsCount = await Thread.countDocuments({ parentId: { $in: [null, undefined] } });
     const posts = await postsQuery;//Should have .exec function
     const isNext = totalPostsCount > skipAmount + posts.length;
-    return{posts,isNext};
+    return { posts, isNext };
 
 }
