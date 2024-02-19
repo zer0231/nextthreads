@@ -21,8 +21,13 @@ export default function RootLayaout({
     return (
         <ClerkProvider>
             <html lang="en">
-                <body className={`${inter.className} bg-dark-1`}>
-                    {children}
+                <body className={`bg-dark-1 place-items-center`}>
+                    <div className='grid mt-8 place-items-center'>
+                        <h1 className='text-sky-400 '>This is not a thread</h1>
+                        <div className="mt-8">
+                            {children}
+                        </div>
+                    </div>
                 </body>
             </html>
         </ClerkProvider>
