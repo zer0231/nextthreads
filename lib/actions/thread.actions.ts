@@ -55,9 +55,9 @@ export async function fetchThreadById(id: string) {
                     }
                 ]
             }).exec();
-            return thread;
-    } catch (error:any) {
-throw new Error(`Error fetching thread : ${error.message}`)
+        return thread;
+    } catch (error: any) {
+        throw new Error(`Error fetching thread : ${error.message}`)
     }
 }
 
@@ -83,5 +83,28 @@ export async function fetchPosts(pageNumber = 1, pageSize = 20) {
     const posts = await postsQuery;//Should have .exec function
     const isNext = totalPostsCount > skipAmount + posts.length;
     return { posts, isNext };
+}
 
+export async function addCommentToThread(
+    threadId: string,
+    commentText: string,
+    userId: string,
+    path: string
+) {
+    connectToDB();
+    try {
+        const originalThread = await Thread.findById(threadId);
+        if (!originalThread) {
+            throw new Error("Thread not found");
+        }
+        const commentThread = new Thread({
+            text:commentText,
+            author:userId,
+            parentId:threadId
+        });
+        const savedCommentThread = await commentThread.save()
+        originalThread.children.push(savedCommentThread.id )
+    } catch (error: any) {
+        console.log(`While replying error: ${error.message}`)
+    }
 }

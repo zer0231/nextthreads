@@ -2,7 +2,6 @@
 
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { UserValidation } from '@/lib/validations/user';
 import * as z from 'zod';
 import {
     Form,
@@ -18,6 +17,7 @@ import { Button } from '@/components/ui/button';
 // import { updateUser } from '@/lib/actions/user.actions';
 import { usePathname, useRouter } from 'next/navigation';
 import { CommentValidation } from '@/lib/validations/thread';
+import Image from 'next/image';
 
 
 interface Props {
@@ -43,24 +43,30 @@ const Comment = ({ threadId, currentUserImg, currentUserId }: Props) => {
     }
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className='flex flex-col justify-start gap-10'>
+            <form onSubmit={form.handleSubmit(onSubmit)} className='comment-form'>
                 <FormField
                     control={form.control}
                     name="thread"
                     render={({ field }) => (
-                        <FormItem className='flex flex-col w-full gap-3'>
-                            <FormLabel className='text-base-semibold text-light-2'>
-                                Content
+                        <FormItem className='flex items-center w-full gap-3'>
+                            <FormLabel>
+                             <Image
+                             alt='profile-image'
+                             className='rounded-full object-cover'
+                             width={48}
+                             height={48}
+                             src={currentUserImg}
+                             />
                             </FormLabel>
-                            <FormControl className='no-focus border border-dark-4 bg-dark-3 text-light-1' >
+                            <FormControl className='border-none bg-transparent' >
                                 <Input 
-                                    className='account-form_input no-focus'
+                                    className='text-light-1 outline-none no-focus'
                                     placeholder="Start comment :)"
                                     {...field} />
                             </FormControl>
-                            <FormMessage />
+                       
                         </FormItem>)} />
-                <Button className='bg-primary-500' type="submit">Comment</Button>
+                <Button className='comment-form_btn bg-primary-500' type="submit">Reply</Button>
             </form>
         </Form>)
 }
